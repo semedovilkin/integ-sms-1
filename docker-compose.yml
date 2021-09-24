@@ -1,0 +1,56 @@
+version: '3.5'
+services:
+  #  app:
+  #    container_name: integsms
+  #    hostname: integsms
+  #    build:
+  #      dockerfile: ./server/app/Dockerfile
+  #      context: .
+  #      args:
+  #        SPRING_ACTIVE_PROFILE: dev
+  #    environment:
+  #      APP_MODE: DEBUG
+  #      SPRING_ACTIVE_PROFILE: dev
+  #    ports:
+  #      - "8080:8080"
+  #      - "8000:8000"
+  #    volumes:
+  #      - app-backup:/app/files
+  #    depends_on:
+  #      - database
+  #    networks:
+  #      - smsapp
+  database:
+    container_name: integsmsdb
+    hostname: integsmsdb
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: sms
+      POSTGRES_USER: sms
+      POSTGRES_PASSWORD: sms
+    restart: always
+    volumes:
+      - db-backup:/data
+    ports:
+      - "5432:5432"
+    networks:
+      - smsapp
+
+
+networks:
+  smsapp:
+    driver: bridge
+
+volumes:
+  #  app-backup:
+  #    driver: local
+  #    driver_opts:
+  #      type: none
+  #      device: ${PWD}/backups/app
+  #      o: bind
+  db-backup:
+    driver: local
+    driver_opts:
+      type: none
+      device: C:\Users\ilkin.samadov\Desktop\integ-sms-1\backups\database
+      o: bind

@@ -1,0 +1,51 @@
+server:
+  port: 8080
+#  servlet:
+#    context-path: /integ
+
+spring:
+  application:
+    name: integ-notification
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    default-schema: public
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sms
+    username: sms
+    password: sms
+    driverClassName: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+#
+#  kafka:
+#    consumer:
+#      bootstrap-servers: localhost:9092
+#      group-id: sms_group_id
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    producer:
+#      bootstrap-servers: localhost:9092
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        acks: all
+        retries: 10
+        retry.backoff.ms: 1000
+        max.block.ms: 20000
+        delivery.timeout.ms: 30000
+    admin:
+      properties:
+        bootstrap.servers:  localhost:9092
+    consumer:
+      bootstrap-servers:  localhost:9092
+      group-id: sms_group_id
